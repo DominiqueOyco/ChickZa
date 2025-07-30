@@ -154,7 +154,7 @@ const Contact = () => {
                       </div>
                       <div>
                         <h3 className="text-lg font-semibold text-gray-900 mb-1">Call Us</h3>
-                        <p className="text-gray-600">{restaurantInfo.phone}</p>
+                        <p className="text-gray-600">{restaurantInfo.phone || '(714) 555-CHICKZA'}</p>
                         <p className="text-sm text-gray-500 mt-2">
                           Available during business hours
                         </p>
