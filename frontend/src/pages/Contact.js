@@ -189,7 +189,7 @@ const Contact = () => {
                       <div>
                         <h3 className="text-lg font-semibold text-gray-900 mb-1">Hours</h3>
                         <div className="text-gray-600 space-y-1">
-                          <p>Monday - Friday: {restaurantInfo.hours.weekdays}</p>
+                          <p>Monday - Friday: {restaurantInfo.hours?.weekdays || '11:00 AM - 10:00 PM'}</p>
                           <p>Saturday - Sunday: {restaurantInfo.hours.weekends}</p>
                         </div>
                       </div>
