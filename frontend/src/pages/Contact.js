@@ -9,6 +9,8 @@ import { useToast } from '../hooks/use-toast';
 import { restaurantAPI, contactAPI } from '../services/api';
 
 const Contact = () => {
+  const [restaurantInfo, setRestaurantInfo] = useState({});
+  const [loading, setLoading] = useState(true);
   const [contactForm, setContactForm] = useState({
     name: '',
     email: '',
@@ -18,6 +20,22 @@ const Contact = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
+
+  useEffect(() => {
+    const fetchRestaurantInfo = async () => {
+      try {
+        setLoading(true);
+        const info = await restaurantAPI.getRestaurantInfo();
+        setRestaurantInfo(info);
+      } catch (error) {
+        console.error('Error fetching restaurant info:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRestaurantInfo();
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -41,23 +59,43 @@ const Contact = () => {
 
     setIsSubmitting(true);
     
-    // Mock form submission
-    setTimeout(() => {
-      toast({
-        title: "Message sent successfully!",
-        description: "Thank you for contacting us. We'll get back to you within 24 hours.",
-      });
+    try {
+      const result = await contactAPI.submitContact(contactForm);
       
-      setContactForm({
-        name: '',
-        email: '',
-        phone: '',
-        subject: '',
-        message: ''
+      if (result.success) {
+        toast({
+          title: "Message sent successfully!",
+          description: result.message,
+        });
+        
+        setContactForm({
+          name: '',
+          email: '',
+          phone: '',
+          subject: '',
+          message: ''
+        });
+      } else {
+        throw new Error(result.message);
+      }
+    } catch (error) {
+      toast({
+        title: "Failed to send message",
+        description: error.message || "Please try again later.",
+        variant: "destructive"
       });
+    } finally {
       setIsSubmitting(false);
-    }, 1000);
+    }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-pulse text-xl text-gray-600">Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
