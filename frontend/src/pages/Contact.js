@@ -171,7 +171,7 @@ const Contact = () => {
                       </div>
                       <div>
                         <h3 className="text-lg font-semibold text-gray-900 mb-1">Email Us</h3>
-                        <p className="text-gray-600">{restaurantInfo.email}</p>
+                        <p className="text-gray-600">{restaurantInfo.email || 'hello@chickza.com'}</p>
                         <p className="text-sm text-gray-500 mt-2">
                           We'll respond within 24 hours
                         </p>
