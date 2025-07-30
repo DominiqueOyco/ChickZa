@@ -4,11 +4,38 @@ import { Card, CardContent } from '../components/ui/card';
 import { restaurantAPI } from '../services/api';
 
 const About = () => {
+  const [restaurantInfo, setRestaurantInfo] = useState({});
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchRestaurantInfo = async () => {
+      try {
+        setLoading(true);
+        const info = await restaurantAPI.getRestaurantInfo();
+        setRestaurantInfo(info);
+      } catch (error) {
+        console.error('Error fetching restaurant info:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRestaurantInfo();
+  }, []);
+
   const stats = [
     { icon: Star, label: 'Years Serving', value: '4+' },
     { icon: Users, label: 'Happy Customers', value: '10K+' },
     { icon: Award, label: 'Average Rating', value: '4.8/5' }
   ];
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="animate-pulse text-xl text-gray-600">Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white">
