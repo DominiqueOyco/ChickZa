@@ -1,13 +1,49 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Star, Clock, MapPin, Phone } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
-import { menuItems, restaurantInfo, testimonials } from '../mock';
+import { menuAPI, restaurantAPI } from '../services/api';
 
 const Home = () => {
-  const popularItems = [...menuItems.pizza, ...menuItems.chicken].filter(item => item.popular);
+  const [popularItems, setPopularItems] = useState([]);
+  const [restaurantInfo, setRestaurantInfo] = useState({});
+  const [testimonials, setTestimonials] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        
+        // Fetch menu items and filter popular ones
+        const menuData = await menuAPI.getAllMenu();
+        const allItems = [...(menuData.pizza || []), ...(menuData.chicken || [])];
+        const popular = allItems.filter(item => item.popular);
+        setPopularItems(popular);
+
+        // Fetch restaurant info
+        const info = await restaurantAPI.getRestaurantInfo();
+        setRestaurantInfo(info);
+        setTestimonials(info.testimonials || []);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-pulse text-xl text-gray-600">Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen">
@@ -18,11 +54,11 @@ const Home = () => {
             <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
               Welcome to{' '}
               <span className="bg-gradient-to-r from-red-600 to-yellow-500 bg-clip-text text-transparent">
-                Chickza
+                {restaurantInfo.name || 'Chickza'}
               </span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto">
-              {restaurantInfo.tagline}
+              {restaurantInfo.tagline || 'Where Crispy Meets Cheesy'}
             </p>
             <p className="text-lg text-gray-700 mb-12 max-w-2xl mx-auto">
               Experience the perfect fusion of crispy fried chicken and authentic wood-fired pizza,
@@ -171,7 +207,7 @@ const Home = () => {
             </Link>
             <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-red-600 px-8 py-3">
               <Phone className="mr-2 h-5 w-5" />
-              Call {restaurantInfo.phone}
+              Call {restaurantInfo.phone || '(714) 555-CHICKZA'}
             </Button>
           </div>
         </div>

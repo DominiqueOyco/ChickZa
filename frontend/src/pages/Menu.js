@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Plus, Minus } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
@@ -6,12 +6,35 @@ import { Badge } from '../components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
 import { useCart } from '../contexts/CartContext';
 import { useToast } from '../hooks/use-toast';
-import { menuItems } from '../mock';
+import { menuAPI } from '../services/api';
 
 const Menu = () => {
   const [quantities, setQuantities] = useState({});
+  const [menuItems, setMenuItems] = useState({ pizza: [], chicken: [] });
+  const [loading, setLoading] = useState(true);
   const { addToCart } = useCart();
   const { toast } = useToast();
+
+  useEffect(() => {
+    const fetchMenu = async () => {
+      try {
+        setLoading(true);
+        const menuData = await menuAPI.getAllMenu();
+        setMenuItems(menuData);
+      } catch (error) {
+        console.error('Error fetching menu:', error);
+        toast({
+          title: "Error loading menu",
+          description: "Please try refreshing the page.",
+          variant: "destructive"
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMenu();
+  }, [toast]);
 
   const updateQuantity = (itemId, delta) => {
     setQuantities(prev => ({
@@ -81,6 +104,19 @@ const Menu = () => {
       </CardContent>
     </Card>
   );
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Our Menu</h1>
+            <div className="animate-pulse text-lg text-gray-600">Loading delicious items...</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Trash2, Plus, Minus, ShoppingBag } from 'lucide-react';
+import { Trash2, Plus, Minus, ShoppingBag, CheckCircle } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Input } from '../components/ui/input';
@@ -10,9 +10,16 @@ import { useToast } from '../hooks/use-toast';
 import { Link } from 'react-router-dom';
 
 const Cart = () => {
-  const { cartItems, removeFromCart, updateQuantity, clearCart, getTotal } = useCart();
+  const { 
+    cartItems, 
+    removeFromCart, 
+    updateQuantity, 
+    getTotal, 
+    calculateOrderTotals,
+    createOrder,
+    isLoading 
+  } = useCart();
   const { toast } = useToast();
-  const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [orderForm, setOrderForm] = useState({
     name: '',
     phone: '',
@@ -20,9 +27,9 @@ const Cart = () => {
     address: '',
     orderType: 'pickup'
   });
+  const [orderSuccess, setOrderSuccess] = useState(null);
 
-  const subtotal = getTotal();
-  const tax = subtotal * 0.0875; // CA tax rate
+  const { subtotal, tax } = calculateOrderTotals();
   const deliveryFee = orderForm.orderType === 'delivery' ? 3.99 : 0;
   const total = subtotal + tax + deliveryFee;
 
@@ -46,7 +53,7 @@ const Cart = () => {
     });
   };
 
-  const handleCheckout = () => {
+  const handleCheckout = async () => {
     if (!orderForm.name || !orderForm.phone) {
       toast({
         title: "Missing information",
@@ -56,22 +63,74 @@ const Cart = () => {
       return;
     }
 
-    // Mock checkout process
-    toast({
-      title: "Order placed successfully!",
-      description: `Your order has been placed. Order #${Date.now()}. We'll contact you shortly.`,
-    });
-    
-    clearCart();
-    setOrderForm({
-      name: '',
-      phone: '',
-      email: '',
-      address: '',
-      orderType: 'pickup'
-    });
-    setIsCheckingOut(false);
+    if (orderForm.orderType === 'delivery' && !orderForm.address) {
+      toast({
+        title: "Missing address",
+        description: "Please provide a delivery address.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      const order = await createOrder(orderForm, orderForm.orderType);
+      setOrderSuccess(order);
+      toast({
+        title: "Order placed successfully!",
+        description: `Your order #${order.id} has been received. We'll contact you shortly.`,
+      });
+      
+      // Reset form
+      setOrderForm({
+        name: '',
+        phone: '',
+        email: '',
+        address: '',
+        orderType: 'pickup'
+      });
+    } catch (error) {
+      toast({
+        title: "Order failed",
+        description: error.message || "Failed to place order. Please try again.",
+        variant: "destructive"
+      });
+    }
   };
+
+  if (orderSuccess) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-16">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <CheckCircle className="h-24 w-24 text-green-500 mx-auto mb-6" />
+          <h1 className="text-3xl font-bold text-gray-900 mb-4">Order Confirmed!</h1>
+          <div className="bg-white rounded-lg p-8 shadow-lg mb-8">
+            <h2 className="text-xl font-semibold mb-4">Order Details</h2>
+            <div className="space-y-2 text-left">
+              <p><strong>Order ID:</strong> {orderSuccess.id}</p>
+              <p><strong>Total:</strong> ${orderSuccess.total.toFixed(2)}</p>
+              <p><strong>Order Type:</strong> {orderSuccess.order_type}</p>
+              <p><strong>Status:</strong> {orderSuccess.status}</p>
+            </div>
+          </div>
+          <div className="space-y-4">
+            <Link to="/menu">
+              <Button size="lg" className="bg-red-600 hover:bg-red-700 text-white">
+                Order More Items
+              </Button>
+            </Link>
+            <Button 
+              size="lg" 
+              variant="outline" 
+              onClick={() => setOrderSuccess(null)}
+              className="ml-4"
+            >
+              View Cart
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (cartItems.length === 0) {
     return (
@@ -239,7 +298,7 @@ const Cart = () => {
 
                 {orderForm.orderType === 'delivery' && (
                   <div className="space-y-2">
-                    <Label htmlFor="address">Delivery Address</Label>
+                    <Label htmlFor="address">Delivery Address *</Label>
                     <Input
                       id="address"
                       value={orderForm.address}
@@ -252,13 +311,13 @@ const Cart = () => {
                 <Button 
                   className="w-full bg-red-600 hover:bg-red-700 text-white"
                   onClick={handleCheckout}
-                  disabled={isCheckingOut}
+                  disabled={isLoading}
                 >
-                  {isCheckingOut ? 'Processing...' : 'Place Order'}
+                  {isLoading ? 'Processing...' : 'Place Order'}
                 </Button>
 
                 <p className="text-xs text-gray-500 text-center">
-                  * This is a demo. No actual payment will be processed.
+                  * This is a demo using file-based storage.
                 </p>
               </CardContent>
             </Card>
