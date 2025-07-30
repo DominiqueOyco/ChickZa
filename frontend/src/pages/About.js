@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Clock, MapPin, Phone, Mail, Star, Award, Users } from 'lucide-react';
 import { Card, CardContent } from '../components/ui/card';
-import { restaurantInfo } from '../mock';
+import { restaurantAPI } from '../services/api';
 
 const About = () => {
   const stats = [
