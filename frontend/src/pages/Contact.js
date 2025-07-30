@@ -137,7 +137,7 @@ const Contact = () => {
                       </div>
                       <div>
                         <h3 className="text-lg font-semibold text-gray-900 mb-1">Visit Us</h3>
-                        <p className="text-gray-600">{restaurantInfo.address}</p>
+                        <p className="text-gray-600">{restaurantInfo.address || '1234 Harbor Blvd, Anaheim, CA 92805'}</p>
                         <p className="text-sm text-gray-500 mt-2">
                           Free parking available
                         </p>
