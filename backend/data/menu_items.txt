@@ -1,0 +1,96 @@
+{
+  "pizza": [
+    {
+      "id": 1,
+      "name": "Margherita Classic",
+      "description": "Fresh mozzarella, tomato sauce, basil, olive oil",
+      "price": 16.99,
+      "image": "https://images.unsplash.com/photo-1604382354936-07c5b6b2faaa?w=400",
+      "category": "pizza",
+      "popular": true
+    },
+    {
+      "id": 2,
+      "name": "Pepperoni Supreme",
+      "description": "Double pepperoni, mozzarella, tomato sauce",
+      "price": 19.99,
+      "image": "https://images.unsplash.com/photo-1628840042765-356cda07504e?w=400",
+      "category": "pizza",
+      "popular": true
+    },
+    {
+      "id": 3,
+      "name": "BBQ Chicken Pizza",
+      "description": "Grilled chicken, BBQ sauce, red onions, cilantro",
+      "price": 21.99,
+      "image": "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400",
+      "category": "pizza",
+      "popular": false
+    },
+    {
+      "id": 4,
+      "name": "Meat Lovers",
+      "description": "Pepperoni, sausage, ham, bacon, ground beef",
+      "price": 24.99,
+      "image": "https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?w=400",
+      "category": "pizza",
+      "popular": false
+    },
+    {
+      "id": 5,
+      "name": "Veggie Delight",
+      "description": "Bell peppers, mushrooms, onions, olives, tomatoes",
+      "price": 18.99,
+      "image": "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=400",
+      "category": "pizza",
+      "popular": false
+    }
+  ],
+  "chicken": [
+    {
+      "id": 6,
+      "name": "Original Crispy Chicken",
+      "description": "8 pieces of our signature crispy fried chicken",
+      "price": 18.99,
+      "image": "https://images.unsplash.com/photo-1569058242253-92a9c755a0ec?w=400",
+      "category": "chicken",
+      "popular": true
+    },
+    {
+      "id": 7,
+      "name": "Spicy Hot Wings",
+      "description": "12 pieces of spicy buffalo wings with ranch dip",
+      "price": 15.99,
+      "image": "https://images.unsplash.com/photo-1608039755401-742074f0548d?w=400",
+      "category": "chicken",
+      "popular": true
+    },
+    {
+      "id": 8,
+      "name": "Honey BBQ Tenders",
+      "description": "6 crispy chicken tenders with honey BBQ sauce",
+      "price": 14.99,
+      "image": "https://images.unsplash.com/photo-1562967914-608f82629710?w=400",
+      "category": "chicken",
+      "popular": false
+    },
+    {
+      "id": 9,
+      "name": "Family Bucket",
+      "description": "16 pieces mixed chicken with 2 large sides",
+      "price": 32.99,
+      "image": "https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?w=400",
+      "category": "chicken",
+      "popular": false
+    },
+    {
+      "id": 10,
+      "name": "Nashville Hot Sandwich",
+      "description": "Crispy chicken breast with Nashville hot sauce on brioche",
+      "price": 12.99,
+      "image": "https://images.unsplash.com/photo-1553979459-d2229ba7433a?w=400",
+      "category": "chicken",
+      "popular": false
+    }
+  ]
+}
