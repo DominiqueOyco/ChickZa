@@ -2,11 +2,6 @@
 
 **Where Crispy Meets Cheesy** - A modern restaurant website for pizza and fried chicken lovers!
 
-## 🌐 **Live Demo**
-
-The application is currently running and accessible at:
-**Frontend URL:** [Open Chickza Website](https://62121090-d16c-4c59-a22a-da639dc13978.preview.emergentagent.com)
-
 ## 📋 **What is Chickza?**
 
 Chickza is a full-stack restaurant website featuring:
@@ -190,7 +185,6 @@ This is a demonstration application with:
 For questions about this demo application:
 - Check the contact form on the website
 - Review the source code in the project files
-- Visit the live demo link above
 
 ---
 
