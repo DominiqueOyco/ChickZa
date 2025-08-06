@@ -10,7 +10,6 @@ import uuid
 from datetime import datetime
 from file_storage import MenuService, OrderService, RestaurantService, ContactService
 
-
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
@@ -133,10 +132,8 @@ async def create_order(order_request: OrderRequest):
     try:
         order_data = order_request.dict()
         new_order = OrderService.create_order(order_data)
-        
         if not new_order:
             raise HTTPException(status_code=500, detail="Failed to create order")
-        
         return OrderResponse(**new_order)
     except HTTPException:
         raise

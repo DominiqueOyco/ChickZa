@@ -34,5 +34,32 @@
     "delivery_fee": 3.99,
     "total": 61.2,
     "created_at": "2025-07-30T23:14:52.167483"
+  },
+  {
+    "id": "order_15542c00",
+    "items": [
+      {
+        "id": 2,
+        "name": "Pepperoni Supreme",
+        "description": "Double pepperoni, mozzarella, tomato sauce",
+        "price": 19.99,
+        "image": "https://images.unsplash.com/photo-1628840042765-356cda07504e?w=400",
+        "category": "pizza",
+        "quantity": 1
+      }
+    ],
+    "customer_info": {
+      "name": "testabc1",
+      "phone": "111111111",
+      "email": "test111@gmail.com",
+      "address": ""
+    },
+    "order_type": "pickup",
+    "status": "pending",
+    "subtotal": 19.99,
+    "tax": 1.75,
+    "delivery_fee": 0.0,
+    "total": 21.74,
+    "created_at": "2025-08-06T20:28:13.579867"
   }
 ]
